@@ -1,0 +1,19 @@
+.trash {
+    padding-left: 20px;
+    color: #75b7ec;
+    transition: 0.3s;
+}
+
+.header-list {
+    background-color: #75b7ec;
+    display: flex;
+    width: 100%;
+    height: 100px;
+    border-top-right-radius: 20px;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.header-list:hover .trash {
+    color: white;
+}

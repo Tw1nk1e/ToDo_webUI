@@ -1,0 +1,37 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Category {
+    id: String
+    name: String
+}
+
+type Mutation {
+    addCategory(name: String): Category
+    addTask(category: String, desc: String): Task
+    changeTaskStatus(id: String): Boolean
+    deleteCategory(id: String): Boolean
+    deleteTask(id: String): Boolean
+}
+
+type Query {
+    getCategories: [Category]
+    getTasks: [Task]
+    getTasksByCategory(id: String): [Task]
+}
+
+type Task {
+    category: String
+    desc: String
+    id: String
+    status: Statuses
+}
+
+enum Statuses {
+    DONE
+    UNDONE
+}
