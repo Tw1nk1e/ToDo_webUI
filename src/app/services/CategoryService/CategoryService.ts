@@ -11,9 +11,9 @@ export const getCategories = () => {
 export const createCategory = (name: String) => {
     return client
       .mutate({ mutation: ADD_CATEGORY , variables: { name }})
-      .then((promise) => {
+      .then((response) => {
           client.cache.reset();
-          return promise.data
+          return response.data.addCategory
       })
 };
 

@@ -1,6 +1,11 @@
 import {action, observable, runInAction} from 'mobx';
 import Task from "../../models/Task";
-import { changeStatus, createTask, getTasks, removeTask } from "../../services/TaskService/TaskService";
+import {
+  removeTask,
+  createTask,
+  changeStatus,
+  getTasksByCategory
+} from "../../services/TaskService/TaskService";
 
 export class TaskStore {
 
@@ -11,41 +16,37 @@ export class TaskStore {
     this.isLoading = true;
     return createTask(desc, category)
       .then(() => runInAction(() => {
-        this.loadTasks();
+        this.loadTasksByCategory(category);
         this.isLoading = false;
       }))
   };
 
-  @action loadTasks = () => {
+  @action loadTasksByCategory = (id: string) => {
     this.isLoading = true;
-    return getTasks()
+    return getTasksByCategory(id)
       .then((response) => runInAction(() => {
-        this.tasks = response.getTasks;
+        this.tasks = response.getTasksByCategory;
         this.isLoading = false;
-        return this.tasks;
       }))
   };
 
-  @action changeTaskStatus = (id: String) => {
+  @action changeTaskStatus = (task: Task) => {
     this.isLoading = true;
-    return changeStatus(id)
-      .then((response: any) => runInAction(() => {
-        this.loadTasks();
-        this.isLoading = false;
-        return response;
-      }))
-  };
-
-  @action deleteTask = (id: String) => {
-    this.isLoading = true;
-    return removeTask(id)
+    return changeStatus(task.id)
       .then(() => runInAction(() => {
-        this.loadTasks();
+        this.loadTasksByCategory(task.category);
+        this.isLoading = false;
+      }))
+  };
+
+  @action deleteTask = (task: Task) => {
+    this.isLoading = true;
+    return removeTask(task.id)
+      .then(() => runInAction(() => {
+        this.loadTasksByCategory(task.category);
         this.isLoading = false;
       }))
   };
 }
-
-
 
 export default new TaskStore();

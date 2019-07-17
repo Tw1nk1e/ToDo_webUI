@@ -11,6 +11,17 @@ const GET_TASKS = gql`
     }
 `;
 
+const GET_TASKS_BY_CATEGORY = gql`
+    query GetTasksByCategory($id: String!) {
+        getTasksByCategory(id: $id) {
+            id
+            desc
+            status
+            category
+        }
+    }
+`;
+
 const ADD_TASK = gql`
     mutation addTask($desc: String!, $category: String!){
         addTask(desc: $desc, category: $category) {
@@ -31,4 +42,4 @@ const DELETE_STATUS = gql`
     }
 `;
 
-export { GET_TASKS, CHANGE_STATUS, ADD_TASK, DELETE_STATUS }
+export { GET_TASKS, CHANGE_STATUS, ADD_TASK, DELETE_STATUS, GET_TASKS_BY_CATEGORY }

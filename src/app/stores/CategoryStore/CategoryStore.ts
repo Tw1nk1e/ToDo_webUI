@@ -5,29 +5,29 @@ import Category from "../../models/Category";
 export class CategoryStore {
 
   @observable isLoading: boolean = false;
-  @observable activeCategory: Category | null = null;
   @observable categories: Category[] = [];
+  @observable activeCategory: Category | null = null;
 
   @action loadCategories = () => {
     this.isLoading = true;
     return getCategories()
       .then((response) => runInAction(() => {
+        if (!response.getCategories.length) this.addCategory('Your first list');
         this.categories = response.getCategories;
-        if (this.categories.length) {
-          this.activeCategory = this.categories[0];
-        } else {
-          this.addCategory('Your first list')
-        }
         this.isLoading = false;
-        return this.categories;
       }))
+  };
+
+  @action setActiveCategory = () => {
+    if (this.categories.length) this.activeCategory = this.categories[0]
   };
 
   @action addCategory = (name: string) => {
     this.isLoading = true;
     return createCategory(name)
-      .then(() => runInAction(() => {
+      .then((response: Category) => runInAction(() => {
         this.loadCategories();
+        this.activeCategory = response;
         this.isLoading = false;
       }))
   };
@@ -38,7 +38,10 @@ export class CategoryStore {
     if (this.activeCategory) {
       return deleteCategory(this.activeCategory.id)
         .then(() => runInAction(() => {
-          this.loadCategories();
+          this.loadCategories()
+            .then(() => runInAction(() => {
+              this.setActiveCategory()
+            }));
           this.isLoading = false;
         }))
     }

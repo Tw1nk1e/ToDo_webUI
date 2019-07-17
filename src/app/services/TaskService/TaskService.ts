@@ -1,9 +1,16 @@
 import { client } from "../ClientService";
-import { GET_TASKS, CHANGE_STATUS, ADD_TASK, DELETE_STATUS } from './graphql'
+import { GET_TASKS, CHANGE_STATUS, ADD_TASK, DELETE_STATUS, GET_TASKS_BY_CATEGORY } from './graphql'
 
 export const getTasks = () => {
     return client
     .query({ query: GET_TASKS }).then((promise) => {
+      return promise.data
+    })
+};
+
+export const getTasksByCategory = (id: string) => {
+    return client
+    .query({ query: GET_TASKS_BY_CATEGORY, variables: { id } }).then((promise) => {
       return promise.data
     })
 };
